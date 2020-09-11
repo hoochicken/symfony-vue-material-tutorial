@@ -169,7 +169,7 @@ class DemoController extends ApiController
     /**
     * @Route("/demo")
     */
-    public function demoAction()
+    public function demonicAction()
     {
         return $this->respond([
             [
