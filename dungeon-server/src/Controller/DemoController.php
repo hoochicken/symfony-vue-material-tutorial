@@ -4,16 +4,16 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DemoController
+class DemoController extends ApiController
 {
     /**
      * @Route("/demo")
      */
     public function demonicAction()
     {
-        return new JsonResponse([
+        return $this->respond([
             [
-                'title' => 'The Real Demo',
+                'title' => 'The Plain Demo',
                 'count' => 0
             ]
         ]);
