@@ -11,11 +11,13 @@ php | <https://windows.php.net/download/> | php.ini mit folgenden aktivierten Mo
 composer | <https://getcomposer.org/download/> | 
 browser | https://addons.mozilla.org/de/firefox/addon/vue-js-devtools/?src=search |
 
-## Init project
+## 1. Init project
 
 create folder of project, e. g. "dungeons"
 
-## Init server
+## 2. Init server
+
+### 2.1 Create Server
 
 Here we initialise our proud project just by generating a new folder.  
 We use the symfony/website-skeleton. 
@@ -32,7 +34,7 @@ cd dungeon-server
 php -S 127.0.0.1:8000 -t public
 ~~~
 
-## First Routing Check
+### 2.2 First Routing Check
 
 Generate first file, a demo controller
 
@@ -69,7 +71,7 @@ Should look a little like this:
 [{"title":"The Real Demo","count":0}]
 ~~~
  
-## Extend A Little 
+### 2.3 Extend A Little 
 
 To simplifiy things a little (to avoid Returning JsonResponse() all the time, we generate a general src/Controller/ApiController.php.
 
@@ -179,24 +181,118 @@ class MovieController extends ApiController
 }
 ~~~ 
 
-## Add symfony/ORM stuff
+### 2.4 Use proper Router
+
+1. Strip @Route in comment from DemoController::demonicAction()) 
+
+2. Add route ro dungeon-server/config/routes.yml
+
+~~~json
+index:
+  path: /
+  controller: App\Controller\DemoController::demonicAction
+
+demoRoute:
+  path: /demo
+  controller: App\Controller\DemoController::demonicAction
+~~~ 
+
+Go to <http://127.0.0.1:8000/demo>, that should still work and return a proper json output.
+
+## 3. Add Database
+
+We want to use a database for storing our data.
+Here our steps:   
+
+* create database environment (which we create with docker)
+* create table via symfony orm
+* check connection
+
+### 3.1 Create Database Environment
+
+To create a database, we use docker.  
+So we simply add following files in the document route:
+
+* Dockerfile
+* docker-compose.yml
+    
+Then we call `docker-compose up`.  
+
+**docker-compose.yml**
+
+~~~json
+version: '2'
+services:
+  dungeondb:
+    image: mysql:latest
+    volumes:
+      - ./dump:/docker-entrypoint-initdb.d
+      - ./.adv-mysql/databasedata:/var/lib/mysql
+    restart: always
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    container_name: dungeon_mysql
+    environment:
+      MYSQL_DATABASE: dungeondb
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: d
+      MYSQL_PASSWORD: d
+    networks:
+      - adventures
+  php:
+    build: .
+    volumes:
+      - ".:/var/www/html"
+    networks:
+      - adventures
+  phpmyadmin:
+    depends_on:
+      - dungeondb
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8081:80'
+    environment:
+      PMA_HOST: dungeon_mysql
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - adventures
+volumes:
+  databasedata:
+networks:
+  adventures:
+~~~ 
+
+**Dockerfile**
+
+~~~cli
+FROM php:7.4-apache
+COPY ./ /var/www/html/
+COPY ./dump /docker-entrypoint-initdb.d/
+RUN docker-php-ext-install pdo pdo_mysql mysqli
+EXPOSE 80
+~~~
+
+Call following comman in the commandline afterwards:
+
+~~~cli
+docker-compose up
+~~~
+
+The docker-compose.yml consists two services: (1) php container, and (2) phpMyAdmin container.  
+
+You can access phpMyAdmin on <http://127.0.0.1:8081>. 
+
+### 3.2 create table via symfony orm
 
 ~~~
 # add symfony stuff
 composer require sensio/framework-extra-bundle
 composer require symfony/orm-pack
 ~~~
-
-## Add docker stuff for database
-
-~~~
-# add file:   docker-compose.yml with phpMyAdmin etc.
-# add file:   Dockerfile
-# add folder: dump/ 
-# add file:   dungeon-server/.env (for doctrine, adjust path of service) 
-docker-compose up
-~~~
-
+## TODO 
 
 ~~~
 # server - 127.0.0.1:8000
