@@ -164,16 +164,16 @@ namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
 
-class MovieController extends ApiController
+class DemoController extends ApiController
 {
     /**
-    * @Route("/movies")
+    * @Route("/demo")
     */
-    public function moviesAction()
+    public function demoAction()
     {
         return $this->respond([
             [
-                'title' => 'The Princess Bride',
+                'title' => 'The Real Demo',
                 'count' => 0
             ]
         ]);
