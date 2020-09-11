@@ -1,0 +1,42 @@
+version: '2'
+services:
+  dungeondb:
+    image: mysql:latest
+    volumes:
+      - ./dump:/docker-entrypoint-initdb.d
+      - ./.adv-mysql/databasedata:/var/lib/mysql
+    restart: always
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    container_name: dungeon_mysql
+    environment:
+      MYSQL_DATABASE: dungeondb
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: d
+      MYSQL_PASSWORD: d
+    networks:
+      - adventures
+  php:
+    build: .
+    volumes:
+      - ".:/var/www/html"
+    networks:
+      - adventures
+  phpmyadmin:
+    depends_on:
+      - dungeondb
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8081:80'
+    environment:
+      PMA_HOST: dungeon_mysql
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - adventures
+volumes:
+  databasedata:
+networks:
+  adventures:
