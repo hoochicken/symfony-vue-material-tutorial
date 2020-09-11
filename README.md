@@ -1,4 +1,4 @@
-# adventures
+# dungeons
 
 ## requirements
 
