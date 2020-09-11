@@ -83,7 +83,6 @@ php bin/console doctrine:migrations:migrate
 ## Trouble shooting
 
 * npm rebuild node-sass
-* yarn cleanup
 
 ## based on
 
