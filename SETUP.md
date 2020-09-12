@@ -59,7 +59,7 @@ class DemoController
             [
                 'title' => 'The Real Demo',
                 'description' => 'Some description',
-                'state' => 0
+                'state' => 1
             ]
         ]);
     }
@@ -72,7 +72,7 @@ Go to <http://127.0.0.1:8000/demo>, and symfony will show you the result right a
 Should look a little like this:
 
 ~~~json
-[{"title":"The Real Demo","description":"Some description","state":0}]
+[{"title":"The Real Demo","description":"Some description","state":1}]
 ~~~
  
 ### 2.3 Extend A Little 
@@ -174,7 +174,7 @@ class DemoController extends ApiController
              [
                 'title' => 'The Real Demo',
                 'description' => 'Some description',
-                'state' => 0
+                'state' => 1
             ]
         ]);
     }

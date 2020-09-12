@@ -11,7 +11,7 @@ class DemoController extends ApiController
             [
                 'title' => 'The Plain Demo',
                 'description' => 'Some description',
-                'state' => 0
+                'state' => 1
             ]
         ]);
     }
