@@ -58,7 +58,8 @@ class DemoController
         return new JsonResponse([
             [
                 'title' => 'The Real Demo',
-                'count' => 0
+                'description' => 'Some description',
+                'state' => 0
             ]
         ]);
     }
@@ -71,7 +72,7 @@ Go to <http://127.0.0.1:8000/demo>, and symfony will show you the result right a
 Should look a little like this:
 
 ~~~json
-[{"title":"The Real Demo","count":0}]
+[{"title":"The Real Demo","description":"Some description","state":0}]
 ~~~
  
 ### 2.3 Extend A Little 
@@ -161,23 +162,19 @@ class ApiController
 
 ... and we adjust our already existing DemoController.php
 
-~~~php 
+~~~php
 <?php
 namespace App\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
-
 class DemoController extends ApiController
 {
-    /**
-    * @Route("/demo")
-    */
     public function demonicAction()
     {
         return $this->respond([
-            [
+             [
                 'title' => 'The Real Demo',
-                'count' => 0
+                'description' => 'Some description',
+                'state' => 0
             ]
         ]);
     }
