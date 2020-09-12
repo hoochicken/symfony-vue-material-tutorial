@@ -1,18 +1,13 @@
 <?php
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Repository\DemoRepository;
 
 class DemoController extends ApiController
 {
-    public function demonicAction()
+    public function demonicAction(DemoRepository $demoRepository)
     {
-        return $this->respond([
-            [
-                'title' => 'The Plain Demo',
-                'description' => 'Some description',
-                'state' => 1
-            ]
-        ]);
+        $demos = $demoRepository->transformAll();
+        return $this->respond($demos);
     }
 }

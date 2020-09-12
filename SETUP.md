@@ -356,8 +356,107 @@ php bin/console doctrine:migrations:migrate
 You might want to have a peek into the phpMyAdmin to admire our work.  
 Go to <http://127.0.0.1:8081>
 
+### 3.3 What happened anyway?
 
+What have we done so far? A LOT OF thingsies. And more: Doctrine helped us pretty much.  
 
+**What we gave to doctrine**
+
+* a database (docker-compose.yml)
+
+**What doctrine did for us**
+
+* database side
+    * handling connection to database (dungeon-server/.env, DATABASE_URL)
+    * generation of table `demo` due to our requirements (via cli)
+    * generation of a migration script (dungeon-server/migrations/Version000000000.php)
+    * generation of table `demo` by execution of a migration script (s. phpMyAdmin:-)
+* file side - generation
+   * migration script (dungeon-server/migrations/Version000000000.php)
+   * dungeon-server/src/Entity/DemoEntity.php 
+   * dungeon-server/src/Repository/DemoRepository.php
+   
+**What we need to do**
+
+* Generate a new entry as test entry in our `demo` database
+* Using entity and repository; adjusting the latter to our needs, so let's proceed! 
+
+## 3.4 Generate test entry in `demo` table
+
+We would love to have some displayable data. So let's add a sample entry:  
+
+* Go to your phpMyAdmin, whom you will find here: <http://127.0.0.1:8081>.
+* Login with 
+    * user: root
+    * passwort: root
+* navigate to `demo` table and generate new entry.
+
+Lazy? Use the following SQL and execute it:
+
+~~~sql
+INSERT INTO `demo` (`title`, `description`, `state`) VALUES ('Custom Title', 'Custom Description', '1');
+~~~  
+
+## 3.5 Retrieve database data via our application
+
+Our `DemoRepository` in `dungeon-server\src\Repository\DemoRepository.php` needs to be new methods. 
+Say, we need to turn the `Demo` object into a generally usable array.  
+Therefore we generate a transform() method ... and a transformAll() method, for a whole bunch (array) of objects.  
+So we add the following code a methods:     
+
+~~~php
+<?php
+    public function transform(Demo $demo)
+    {
+        return [
+            'id'    => (int) $demo->getId(),
+            'title' => (string) $demo->getTitle(),
+            'description' => (string) $demo->getDescription(),
+            'state' => (int) $demo->getState()
+        ];
+    }
+
+    public function transformAll()
+    {
+        $demoEntry = $this->findAll();
+        $return = [];
+
+        foreach ($demoEntry as $demoSingle) {
+            $return[] = $this->transform($demoSingle);
+        }
+
+        return $return;
+    }
+?>
+~~~
+
+And then we actually use these new methods in our `dungeon-server/src/Controller/DemoController.php`: 
+
+~~~php
+<?php
+namespace App\Controller;
+
+use App\Repository\DemoRepository;
+
+class DemoController extends ApiController
+{
+    public function demonicAction(DemoRepository $demoRepository)
+    {
+        // retrieve demo entries as array
+        $demos = $demoRepository->transformAll();
+        return $this->respond($demos);
+    }
+}
+~~~
+
+Now let's check, if everything is working as ist should.  
+Call the url <http://127.0.0.1:8000/demo>. Here you should see something like this:
+
+~~~json
+[{"id":1,"title":"Custom Title","description":"Custom Description","state":1}]
+~~~
+
+**Congratulations! You made it. First mission goal achieved!**
 
 ## TODO 
 

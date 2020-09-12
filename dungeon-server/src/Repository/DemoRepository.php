@@ -24,8 +24,8 @@ class DemoRepository extends ServiceEntityRepository
         return [
             'id'    => (int) $demo->getId(),
             'title' => (string) $demo->getTitle(),
-            'description' => (string) $demo->getTitle(),
-            'state' => (int) $demo->getCount()
+            'description' => (string) $demo->getDescription(),
+            'state' => (int) $demo->getState()
         ];
     }
 
