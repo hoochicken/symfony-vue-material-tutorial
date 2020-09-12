@@ -22,10 +22,13 @@ create folder of project, e. g. "dungeons"
 Here we initialise our proud project just by generating a new folder.  
 We use the symfony/website-skeleton. 
 The server will be available in your browser on http://127.0.0.1:8000
+
 ~~~cli
 # Building server
-# server - 127.0.0.1:8000
+# server -S 127.0.0.1:8000
 composer create-project symfony/website-skeleton dungeon-server
+# -S <addr>:<port> means Run with built-in web server.
+# -t <docroot> specifies document root <docroot> for built-in web server.
 
 # enter the dungeon-server
 cd dungeon-server
