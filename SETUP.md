@@ -354,7 +354,9 @@ php bin/console doctrine:migrations:migrate
 ~~~
   
 You might want to have a peek into the phpMyAdmin to admire our work.  
-Go to <http://127.0.0.1:6060>
+Go to <http://127.0.0.1:8081>
+
+
 
 
 ## TODO 
