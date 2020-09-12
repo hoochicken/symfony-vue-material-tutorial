@@ -19,6 +19,28 @@ class DemoRepository extends ServiceEntityRepository
         parent::__construct($registry, Demo::class);
     }
 
+    public function transform(Demo $demo)
+    {
+        return [
+            'id'    => (int) $demo->getId(),
+            'title' => (string) $demo->getTitle(),
+            'description' => (string) $demo->getTitle(),
+            'state' => (int) $demo->getCount()
+        ];
+    }
+
+    public function transformAll()
+    {
+        $demoEntry = $this->findAll();
+        $return = [];
+
+        foreach ($demoEntry as $demoSingle) {
+            $return[] = $this->transform($demoSingle);
+        }
+
+        return $return;
+    }
+
     // /**
     //  * @return Demo[] Returns an array of Demo objects
     //  */
