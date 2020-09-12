@@ -275,7 +275,7 @@ RUN docker-php-ext-install pdo pdo_mysql mysqli
 EXPOSE 80
 ~~~
 
-Call following comman in the commandline afterwards:
+Call following command in the commandline afterwards:
 
 ~~~cli
 docker-compose up
@@ -285,13 +285,78 @@ The docker-compose.yml consists two services: (1) php container, and (2) phpMyAd
 
 You can access phpMyAdmin on <http://127.0.0.1:8081>. 
 
-### 3.2 create table via symfony orm
+### 3.2 Add symfony stuff for databases
 
 ~~~
 # add symfony stuff
 composer require sensio/framework-extra-bundle
 composer require symfony/orm-pack
 ~~~
+You might find a file like `dungeon-server/.env` now in your structure.  
+Adjust the parameter DATABASE_URL as follows:
+
+~~~ 
+# DATABASE_URL=mysql://<user>:<passwort>@<host>:<port>/<db-name-in-docker-compose> 
+DATABASE_URL=mysql://root:root@localhost:3306/dungeondb
+~~~
+
+### 3.2 Create table via cli
+
+We want to habe a table wird the following columnd:
+
+| column | type | length | nullable | note |
+| --- | --- | --- | --- | --- |
+| id | int | - | - | *exists by default, no generation needed* |
+| title | string | 255 | nullable | - |
+| description | string | 255 | yes | - |
+| state | smallint | - | no | - |
+
+~~~cli
+# generate new table
+php bin/console make:entity
+
+########## insert 1: table name
+
+# Class name of the entity to create or update (e.g. TinyKangaroo):
+# > demo
+# <= I type here 'demo', for we need a demo table
+
+########## insert 2: columns
+
+# New property name (press <return> to stop adding fields):
+# > title
+
+# Field type (enter ? to see all types) [string]:
+# >
+
+# Field length [255]:
+# >
+
+# Can this field be null in the database (nullable) (yes/no) [no]:
+# > no
+~~~
+
+Repeat this for the remaining columns, see table above.
+
+Result: we have a wonderful table ... in the pipe, NOT yet there.  
+In fact doctrine did the first step: generating a php file  
+
+~~~cli
+# actually generating table 'demo' in database
+php bin/console make:migration
+~~~
+
+To really generate the table, doctrine needs to be told, to actually do so with:
+
+~~~cli
+# actually generating table 'demo' in database using doctrine
+php bin/console doctrine:migrations:migrate
+~~~
+  
+You might want to have a peek into the phpMyAdmin to admire our work.  
+Go to <http://127.0.0.1:6060>
+
+
 ## TODO 
 
 ~~~
