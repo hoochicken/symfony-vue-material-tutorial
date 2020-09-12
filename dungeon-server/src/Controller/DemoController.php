@@ -10,7 +10,8 @@ class DemoController extends ApiController
         return $this->respond([
             [
                 'title' => 'The Plain Demo',
-                'count' => 0
+                'description' => 'Some description',
+                'state' => 0
             ]
         ]);
     }
