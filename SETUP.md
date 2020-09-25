@@ -266,25 +266,6 @@ docker-compose up
 
 You can access phpMyAdmin on <http://127.0.0.1:8081>.
 
-**Persistent database data?** 
-
-You might have noticed, that data only exists in the docker container.  
-All vanished with  the command `docker-compose down`.  
-Pretty usedless, uh?  
-So notice the following lines for the database server:
-
-~~~
-- ./dump:/docker-entrypoint-initdb.d
-~~~
-
-This is a mapping; it will copy every file stored in our `dump` folder into the `docker-entrypoint-initdb.d` folder of the docker container.  
-To create persistent data, do as follows:
-
-* Generate an sql dump (via phpMyAdmin)
-* Place the sql dump in the `dump` folder
-
-On every docker-compose up, this sql dump will be executed. 
-
 ### 3.2 Add symfony stuff for databases
 
 ~~~
@@ -397,7 +378,7 @@ Lazy? Use the following SQL and execute it:
 INSERT INTO `demo` (`title`, `description`, `state`) VALUES ('Custom Title', 'Custom Description', '1');
 ~~~  
 
-## 3.5 Retrieve database data via our application
+### 3.5 Retrieve database data via our application
 
 Our `DemoRepository` in `dungeon-server\src\Repository\DemoRepository.php` needs to be new methods. 
 Say, we need to turn the `Demo` object into a generally usable array.  
@@ -457,6 +438,11 @@ Call the url <http://127.0.0.1:8000/demo>. Here you should see something like th
 ~~~
 
 **Congratulations! You made it. First mission goal achieved!**
+
+## 4. Vue frontend
+
+The client site display of our data is pretty minimal, close to useless.  
+C'mon, let's add a beautiful vue frontend.  
 
 ## TODO 
 
@@ -552,7 +538,59 @@ module.exports = {
 }
 
 ~~~
-## based on
+
+## 5. Advanced
+
+### 5.1 Uh...m ... One to go: Persistent database data** 
+
+You might have noticed, that data only exists in the docker container.  
+All vanished with  the command `docker-compose down`.  
+Pretty usedless, uh?  
+So notice the following lines for the database server:
+
+~~~
+- ./dump:/docker-entrypoint-initdb.d
+~~~
+
+This is a mapping; it will copy every file stored in our `dump` folder into the `docker-entrypoint-initdb.d` folder of the docker container.  
+To create persistent data, do as follows:
+
+* Generate an sql dump (via phpMyAdmin)
+* Place the sql dump in the `dump` folder
+
+On every docker-compose up, this sql dump will be executed. 
+
+### 5.2 Renew Entity classes by doctrine
+
+You start your tables by doctrine, then you make some alteration in phpMyAdmin, most of all: add columns.  
+Yet doctrine stays the way it is ... unless you politely ask it to adjust to the existing tables,
+
+Go to command line and to as follows:
+
+~~~
+cd adv-server
+
+# generate php classes
+php bin/console doctrine:mapping:import "App\Entity" annotation --path=src/Entity
+
+# add getter/setter methods
+php bin/console make:entity --regenerate App
+# this should generate repository a well, but doesn't, so:
+
+# got to entity file
+# if the line not already exists, add "* @ORM\Entity(repositoryClass="App\Repository\ActionRepository")" within class comment
+# regenerate class
+php bin/console make:entity --regenerate App
+~~~
+
+Thus you nudge doctrine to add new properties, and methods (getter, setter).
+
+Tip: Always generate tables/entities within cli using doctrine.     
+Generate the alterations (new columns etc.) within noble phpMyAdmin.
+
+Hark! Hark! the lark: Remember to also adjust you sql dump file(s), s. 5.1  
+
+## 6. Based on following Tutorials And Whatevers
 
 * <https://gist.github.com/jcavat/2ed51c6371b9b488d6a940ba1049189b>
 * <https://developer.okta.com/blog/2018/06/14/php-crud-app-symfony-vue>
