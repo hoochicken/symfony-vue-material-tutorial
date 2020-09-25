@@ -211,13 +211,12 @@ Here our steps:
 ### 3.1 Create Database Environment
 
 To create a database, we use docker.  
-So we simply add following files in the document route:
+So we simply add the following file `docker-compose.yml` in the document route.
+It will start two services: 
 
-* Dockerfile
-* docker-compose.yml
+1. database server (dungeondb) container, and 
+2. phpMyAdmin container.
     
-Then we call `docker-compose up`.  
-
 **docker-compose.yml**
 
 ~~~json
@@ -241,12 +240,6 @@ services:
       MYSQL_PASSWORD: d
     networks:
       - adventures
-  php:
-    build: .
-    volumes:
-      - ".:/var/www/html"
-    networks:
-      - adventures
   phpmyadmin:
     depends_on:
       - dungeondb
@@ -265,25 +258,32 @@ networks:
   adventures:
 ~~~ 
 
-**Dockerfile**
-
-~~~cli
-FROM php:7.4-apache
-COPY ./ /var/www/html/
-COPY ./dump /docker-entrypoint-initdb.d/
-RUN docker-php-ext-install pdo pdo_mysql mysqli
-EXPOSE 80
-~~~
-
 Call following command in the commandline afterwards:
 
 ~~~cli
 docker-compose up
 ~~~
 
-The docker-compose.yml consists two services: (1) php container, and (2) phpMyAdmin container.  
+You can access phpMyAdmin on <http://127.0.0.1:8081>.
 
-You can access phpMyAdmin on <http://127.0.0.1:8081>. 
+**Persistent database data?** 
+
+You might have noticed, that data only exists in the docker container.  
+All vanished with  the command `docker-compose down`.  
+Pretty usedless, uh?  
+So notice the following lines for the database server:
+
+~~~
+- ./dump:/docker-entrypoint-initdb.d
+~~~
+
+This is a mapping; it will copy every file stored in our `dump` folder into the `docker-entrypoint-initdb.d` folder of the docker container.  
+To create persistent data, do as follows:
+
+* Generate an sql dump (via phpMyAdmin)
+* Place the sql dump in the `dump` folder
+
+On every docker-compose up, this sql dump will be executed. 
 
 ### 3.2 Add symfony stuff for databases
 

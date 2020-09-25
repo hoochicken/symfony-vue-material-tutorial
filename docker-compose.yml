@@ -18,12 +18,6 @@ services:
       MYSQL_PASSWORD: d
     networks:
       - adventures
-  php:
-    build: .
-    volumes:
-      - ".:/var/www/html"
-    networks:
-      - adventures
   phpmyadmin:
     depends_on:
       - dungeondb
