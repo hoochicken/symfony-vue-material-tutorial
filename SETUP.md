@@ -444,59 +444,115 @@ Call the url <http://127.0.0.1:8000/demo>. Here you should see something like th
 The client site display of our data is pretty minimal, close to useless.  
 C'mon, let's add a beautiful vue frontend.  
 
-## TODO 
+### 4.1 Install Vue and Create Project
 
 ~~~
-# server - 127.0.0.1:8000
-composer create-project symfony/website-skeleton dungeon-server
-cd dungeon-server
-php -S 127.0.0.1:8000 -t public
-
-# client - 127.0.0.1:8080
-# vue itself uses package.json, so we will use npm consitantly
-# npm install -g @vue/cli
 npm i -g @vue/cli
-vue create dungeon-client
-cd dungeon-client
-npm run serve
+~~~
 
-# Create the Symfony Skeleton API
-cd dungeon-server
-composer require sensio/framework-extra-bundle
+That might take sometime. But as soon, as vue.js is on, you can create a new project.  
+We will put the frontend into the ´dungeon-client` folder. 
 
-# add file:   docker-compose.yml with phpMyAdmin etc.
-# add file:   Dockerfile
-# add folder: dump/ 
-# add file:   dungeon-server/.env (for doctrine, adjust path of service) 
-docker-compose up
+~~~
+vue create dungeon-client 
+# follow instructions with default settings
+~~~
 
-# create the Symfony Skeleton API
-cd dungeon-server
-# ORM package
-composer require symfony/orm-pack
-# Symfony Maker creates empty commands, controllers, form classes, tests (less writing boilerplate code for myself:-)
-composer require symfony/maker-bundle --dev
-# if new db, then: (here we got the dump db migration, so not needed
-# php bin/console make:entity
-# migrate
-php bin/console doctrine:mapping:import "App\Entity" annotation --path=src/Entity
-php bin/console make:entity --regenerate App
-# got to entity files
-# add "* @ORM\Entity(repositoryClass="App\Repository\XxxxxxRepository")" within class comment
-# regenerate class
-php bin/console make:entity --regenerate App
+Now check out: <http://127.0.0.1:8080/>, here we got, you should see Vue.js App now.
 
-# alter some files
+### 4.2 Add router and Ajax
 
-# Create a Frontend in Vue
-cd dungeon-server
-composer require nelmio/cors-bundle
-
+~~~
 # add vue router and axios
 cd dungeon-client
 npm install vue-router
-# install axios as plugin (important, not just install)
-vue add axios # = (npm install vue-cli-plugin-axios? + adds plugins/axios.js file)
+vue add axios
+~~~
+
+Info: What does `vue add axios` do? It does same as `npm install vue-cli-plugin-axios` PLUS adds plugins/axios.js file, pretty useful, nh?
+
+While the axios is added directly to the `main.js`, the router need to be added manually.  
+
+You need to add some lines. Your `dungeon-client/src/main.js` file should look like this now:
+
+~~~js
+import Vue from 'vue'
+import App from './App.vue'
+import VueRouter from 'vue-router'
+
+Vue.config.productionTip = false;
+Vue.use(VueRouter);
+
+const routes = [
+  { path: '/', component: App }
+];
+
+const router = new VueRouter({
+  mode: 'history',
+  routes
+});
+
+new Vue({
+  router,
+  render: h => h(App),
+}).$mount('#app');
+~~~  
+
+Now you need to use the router in your template file, which is `dungeon-server/src/App.js`: 
+
+~~~
+<template>
+  <div id="app">
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'App',
+  components: {
+
+  }
+}
+</script>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
+~~~
+
+Now check out: <http://127.0.0.1:8080/>. You should see the Vue.js cli homepage again:-)
+
+**Add new route**
+
+
+<router-view></router-view>
+
+
+If you get an error like this: `'options' is defined but never used`; you need to fix this. 
+Go to `dungeon-client/src/plugins/axios.js` and strip "options" from install call.   
+`Plugin.install = function(Vue, options) {` => `Plugin.install = function(Vue) {` 
+
+**Does routing work??**
+
+
+
+## 4.3 Add Material Framework
+
+npm install vue-material --save
+
+## TODO 
+
+~~~
+# Create the Symfony Skeleton API
+
 # if lint error, go to plugins/axios.js, remove options from call 'Plugin.install = function(Vue) {'
 
 # add bootstrap
@@ -595,4 +651,5 @@ Hark! Hark! the lark: Remember to also adjust you sql dump file(s), s. 5.1
 * <https://gist.github.com/jcavat/2ed51c6371b9b488d6a940ba1049189b>
 * <https://developer.okta.com/blog/2018/06/14/php-crud-app-symfony-vue>
 * <https://symfony.com/doc/current/doctrine/reverse_engineering.html>
+* <https://router.vuejs.org/installation.html#direct-download-cdn>
 
