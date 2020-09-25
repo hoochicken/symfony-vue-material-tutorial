@@ -1,7 +1,12 @@
 <template>
     <div>
         <h2>Demonic</h2>
-        {{ demoCracy }}
+        <ul>
+            <li v-for="item in demoCracy" :key="item.id">
+                <h4>{{ item.title }}</h4>
+                <div>{{ item.description }}</div>
+            </li>
+        </ul>
     </div>
 </template>
 
