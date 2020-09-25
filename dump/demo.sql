@@ -24,7 +24,8 @@ CREATE TABLE `demo` (
 INSERT INTO `demo` (`id`, `title`, `description`, `state`) VALUES
 (1, 'Custom Title', 'Custom Description', 1),
 (2, 'Another Custom Title', 'Another Custom Description', 0),
-(3, 'Yet Another Custom Title', 'Yet Another Custom Description', 1);
+(3, 'Yet Another Custom Title', 'Yet Another Custom Description', 1),
+(4, 'Guess What!', 'Guess What This Is Description', 1);
 
 --
 -- Indizes der exportierten Tabellen
