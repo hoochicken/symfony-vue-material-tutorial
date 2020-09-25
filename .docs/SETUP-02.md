@@ -181,11 +181,3 @@ demoRoute:
 ~~~ 
 
 Go to <http://127.0.0.1:8000/demo>, that should still work and return a proper json output.
-
-### 2.5 Enable Cross Site
-
-Later we will need cors, so we install nelmio cors bundle right away:-)
-
-~~~cli
-composer require nelmio/cors-bundle
-~~~
