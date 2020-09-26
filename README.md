@@ -41,6 +41,7 @@ npm run styleguide
 Frontend | vue | <http://127.0.0.1:8080/>
 Backend | Symfony | <http://127.0.0.1:8000/>
 Database | phpMyAdmin | <http://127.0.0.1:8081/>
+Styleguidist | styleguidist | <http://127.0.0.1:6060/>
 
 ## Renew Entity classes by doctrine
 

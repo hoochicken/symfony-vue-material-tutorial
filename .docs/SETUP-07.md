@@ -1,6 +1,43 @@
 ## 7. Advanced stuff 
 
-### 7.1 Pagination
+### 7.1 Styleguidist 
+
+~~~cli
+# dungeon-client: add styleguidist
+cd dungeon-client
+vue add styleguidist
+~~~
+
+Add one line to `styleguidist.config.js`, it is: tada! `components: 'src/components/global/[a-zA-Z]*.vue'`  
+
+~~~js
+module.exports = {
+	// set your styleguidist configuration here
+	title: 'Dungeoneer\'s Style Guidist!',
+	// components: 'src/components/**/[A-Z]*.vue',
+	// defaultExample: true,
+	// sections: [
+	//   {
+	//     name: 'First Section',
+	//     components: 'src/components/**/[A-Z]*.vue'
+	//   }
+	// ],
+	// webpackConfig: {
+	//   // custom config goes here
+	// },
+	// components: 'components/**/[a-zA-Z]*.vue',
+	exampleMode: 'expand',
+	components: 'src/components/global/[a-zA-Z]*.vue'
+}
+~~~
+
+~~~cli
+# dungeon-client: add styleguidist
+cd dungeon-client
+npm run styleguide
+~~~
+
+### 7.2 Pagination
 
 To add pagination, install some.
 
@@ -44,7 +81,6 @@ What?! Not finished yet? Hell, yes, we want it all: Hello, Stylegudist!
 ## TODO 
 
 ~~~
-
 # dungeon-client
 # add file dungeon-client/.env
 
@@ -53,29 +89,6 @@ What?! Not finished yet? Hell, yes, we want it all: Hello, Stylegudist!
 # add controllers 
 # add repositories
 # adjust usages use Doctrine\Persistence\ManagerRegistry;
-
-# dungeon-client: add styleguidist
-vue add styleguidist
-# update styleguidist.config.js
-module.exports = {
-	// set your styleguidist configuration here
-	title: 'Adventurous Style Guidist!',
-	// components: 'src/components/**/[A-Z]*.vue',
-	// defaultExample: true,
-	// sections: [
-	//   {
-	//     name: 'First Section',
-	//     components: 'src/components/**/[A-Z]*.vue'
-	//   }
-	// ],
-	// webpackConfig: {
-	//   // custom config goes here
-	// },
-	// components: 'components/**/[a-zA-Z]*.vue',
-	exampleMode: 'expand',
-	components: 'src/components/global/[a-zA-Z]*.vue',
-}
-
 ~~~
 
 
