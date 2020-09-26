@@ -41,6 +41,7 @@
                         <div>{{ item.description }}</div>
                     </li>
                 </ul>
+                <pagination :totalPage="listState.totalPage" @btnClick="changePage"></pagination>
             </md-app-content>
         </md-app>
     </div>
@@ -51,13 +52,40 @@
         name: "Demonic",
         data() {
             return {
-                demoCracy: {}
+                response: {},
+                demoCracy: {},
+                searchterm: '',
+                listState: {
+                    maxResults: 3,
+                    currentPage: 0,
+                    totalPage: 0,
+                    totalItems: 0
+                },
+                listStateDefault: {
+                    maxResults: 3,
+                    currentPage: 0,
+                    totalPage: 0,
+                    totalItems: 0
+                }
             }
         },
         async mounted() {
-            var params =  { };
-            const response = await this.axios.post('/demo', params);
-            this.demoCracy = response.data;
+            this.list();
+        },
+        methods: {
+            async list() {
+                let params = new URLSearchParams();
+                params.append('searchterm', this.searchterm);
+                params.append('listState', JSON.stringify(this.listState));
+                const response = await this.axios.post('/demo', params);
+                this.response = response;
+                this.demoCracy = response.data.items;
+                this.listState = response.data.listState;
+            },
+            async changePage (n) {
+                this.listState.currentPage = n > 0 ? n - 1 : n;
+                this.list();
+            }
         }
     }
 </script>

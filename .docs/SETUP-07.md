@@ -1,20 +1,49 @@
-## 7. Styleguidist
+## 7. Advanced stuff 
+
+### 7.1 Pagination
+
+To add pagination, install some.
+
+~~~cli
+npm install --save vue-paginate-al
+~~~
+
+Afterwards register pagination in `dungeon-client/src/main.js`.
+
+~~~vuejs
+import Pagination from 'vue-paginate-al'
+// [...]
+Vue.component('pagination', Pagination);
+~~~
+
+And use following tag in you template `dungeon-client/src/components/demo/Demonic.vue`
+
+~~~vue
+<template>
+// [...]
+<pagination :totalPage="listState.totalPage" @btnClick="changePage"></pagination>
+// [...]
+</template>
+
+<script>
+// [...]
+<pagination :totalPage="listState.totalPage" @btnClick="changePage"></pagination>
+
+      changePage : function(n) {
+          this.listState.currentPage = n > 0 ? n - 1 : n;
+          this.list();
+      },
+// [...]
+</script>
+~~~
+
+### 7.2 Styleguidist
 
 What?! Not finished yet? Hell, yes, we want it all: Hello, Stylegudist!
 
 ## TODO 
 
 ~~~
-# Create the Symfony Skeleton API
-
-# if lint error, go to plugins/axios.js, remove options from call 'Plugin.install = function(Vue) {'
-
-# add bootstrap
-npm i bootstrap jquery popper.js
-
-# add pagination 
-npm install --save vue-paginate-al
-# register pagination in main.js
 
 # dungeon-client
 # add file dungeon-client/.env
