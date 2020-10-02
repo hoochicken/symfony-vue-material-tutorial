@@ -37,65 +37,7 @@ cd dungeon-client
 npm run styleguide
 ~~~
 
-### 7.2 Pagination
-
-To add pagination, install some.
-
-~~~cli
-npm install --save vue-paginate-al
-~~~
-
-Afterwards register pagination in `dungeon-client/src/main.js`.
-
-~~~vuejs
-import Pagination from 'vue-paginate-al'
-// [...]
-Vue.component('pagination', Pagination);
-~~~
-
-And use following tag in you template `dungeon-client/src/components/demo/Demonic.vue`
-
-~~~vue
-<template>
-// [...]
-<pagination :totalPage="listState.totalPage" @btnClick="changePage"></pagination>
-// [...]
-</template>
-
-<script>
-// [...]
-<pagination :totalPage="listState.totalPage" @btnClick="changePage"></pagination>
-
-      changePage : function(n) {
-          this.listState.currentPage = n > 0 ? n - 1 : n;
-          this.list();
-      },
-// [...]
-</script>
-~~~
-
-### 7.2 Styleguidist
-
-What?! Not finished yet? Hell, yes, we want it all: Hello, Stylegudist!
-
-## TODO 
-
-~~~
-# dungeon-client
-# add file dungeon-client/.env
-
-# dungeon-server
-# enter routes in dungeon-server/config/packages/routes.yaml
-# add controllers 
-# add repositories
-# adjust usages use Doctrine\Persistence\ManagerRegistry;
-~~~
-
-
-
-## 5. Advanced Lose Ends
-
-### 5.1 Uh...m ... One to go: Persistent database data** 
+## 7.2 Uh...m ... One to go: Persistent database data** 
 
 You might have noticed, that data only exists in the docker container.  
 All vanished with  the command `docker-compose down`.  
@@ -114,7 +56,7 @@ To create persistent data, do as follows:
 
 On every docker-compose up, this sql dump will be executed. 
 
-### 5.2 Renew Entity classes by doctrine
+## 7.3 Renew Entity classes by doctrine
 
 You start your tables by doctrine, then you make some alteration in phpMyAdmin, most of all: add columns.  
 Yet doctrine stays the way it is ... unless you politely ask it to adjust to the existing tables,
@@ -144,7 +86,7 @@ Generate the alterations (new columns etc.) within noble phpMyAdmin.
 
 Hark! Hark! the lark: Remember to also adjust you sql dump file(s), s. 5.1  
 
-## 6. Based on following Tutorials And Whatevers
+## 8. Based on following Tutorials And Whatevers
 
 * <https://gist.github.com/jcavat/2ed51c6371b9b488d6a940ba1049189b>
 * <https://developer.okta.com/blog/2018/06/14/php-crud-app-symfony-vue>
