@@ -19,7 +19,7 @@ Let's see, how mighty it is and install it.
 npm install vue-material --save
 ~~~
 
-Afterwars we need to register Material in `dungeon-client/src/main.js` like this:
+Afterwards we need to register Material in `dungeon-client/src/main.js` like this:
 
 ~~~js
 import VueMaterial from 'vue-material'
@@ -141,6 +141,19 @@ So we just add some Material code do out Demonic file `dungeon-client\src\compon
 <style scoped>
 
 </style>
+~~~
+
+### Icons not showing ? 
+
+~~~click
+cd dungeon-client
+npm install material-icons
+~~~
+
+Afterwards we need to register out new icons in `dungeon-client/src/main.js` like this:
+
+~~~js
+import 'material-icons/iconfont/material-icons.scss';
 ~~~
 
 # Hello, beauty, you made it!
